@@ -14,7 +14,7 @@ import os
 try:
     from .settings_secret import *
 except:
-    print ("Missing settings_secret.py file.")
+    print("Missing settings_secret.py file.")
     quit()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -105,10 +105,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Authentication
+
 AUTHENTICATION_BACKENDS = [
     "django_auth_ldap.backend.LDAPBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
+
+AUTH_LDAP_SERVER_URI = "ldap://ldap.xarxacatala.cat"
+AUTH_LDAP_START_TLS = True
+AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=actius,dc=xarxacatala,dc=cat"
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "displayName",
+    "email": "mail"
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
