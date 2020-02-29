@@ -43,3 +43,5 @@ class Video(models.Model):
     url = models.URLField(max_length=MAX_LENGTH, unique=True)
     fitxer = models.FileField(max_length=MAX_LENGTH, null=True)
     thumbnail = models.ImageField(max_length=MAX_LENGTH, blank=True)
+    encodar = models.BooleanField(default=False)
+    subtitols = models.BooleanField(default=False)
