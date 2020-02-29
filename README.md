@@ -13,11 +13,12 @@ Instruccions per preparar l'entorn de desenvolupament.
 1. Crear el fitxer `VideoManager/settings_secret.py`:
 ```python
 # Create a settings_secret.py for DB credentials following this format:
-SECRET_KEY_SAVED='SECRET_KEY'
-DATABASE_MYSQL="DBName"
-USER_NAME="user"
-PASSWORD="password"
-HOST='127.0.0.1'
+SECRET_KEY_SAVED = 'SECRET_KEY'
+DATABASE_MYSQL = 'DBName'
+USER_NAME = 'user'
+PASSWORD = 'password'
+HOST = '127.0.0.1'
+AUTH_LDAP_BIND_PASSWORD = 'LDAP_PASSWORD'
 ```
 2. Crear els directoris `migrations`:
 ```

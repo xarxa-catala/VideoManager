@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType, LDAPGroupQuery
 try:
     from .settings_secret import *
 except:
@@ -114,12 +116,32 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_LDAP_SERVER_URI = "ldap://ldap.xarxacatala.cat"
+AUTH_LDAP_BIND_DN = "uid=multimedia,ou=serveis,dc=xarxacatala,dc=cat"
 AUTH_LDAP_START_TLS = True
 AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=actius,dc=xarxacatala,dc=cat"
 AUTH_LDAP_USER_ATTR_MAP = {
     "first_name": "displayName",
     "email": "mail"
 }
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    "dc=xarxacatala,dc=cat",
+    ldap.SCOPE_SUBTREE,
+    "(objectClass=groupOfNames)"
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+AUTH_LDAP_REQUIRE_GROUP = (
+    LDAPGroupQuery("cn=encodadors,ou=grups,dc=xarxacatala,dc=cat") |
+    LDAPGroupQuery("cn=superadmin,ou=grups,dc=xarxacatala,dc=cat")
+)
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_active": "cn=encodadors,ou=grups,dc=xarxacatala,dc=cat",
+    "is_staff": "cn=encodadors,ou=grups,dc=xarxacatala,dc=cat",
+    "is_superuser": "cn=superadmin,ou=grups,dc=xarxacatala,dc=cat"
+}
+# Mirror LDAP group assignments.
+AUTH_LDAP_MIRROR_GROUPS = True
+# For more granular permissions, we can map LDAP groups to Django groups.
+AUTH_LDAP_FIND_GROUP_PERMS = True
 
 
 # Internationalization
