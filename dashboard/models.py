@@ -1,4 +1,5 @@
 from django.db import models
+from .utils.move_file import move_file
 
 
 # Create your models here.
@@ -7,6 +8,7 @@ class Show(models.Model):
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
     nom_curt = models.CharField(max_length=MAX_LENGTH, unique=True, null=True)
+    ruta = models.CharField(max_length=MAX_LENGTH, default="")
 
     def __str__(self):
         return self.nom
@@ -17,6 +19,9 @@ class Season(models.Model):
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
     show = models.ForeignKey(Show, on_delete=models.CASCADE)
+    ruta = models.CharField(max_length=MAX_LENGTH,
+                            help_text="Ruta de la temporada (sense incloure la sèrie).",
+                            default="")
 
     def __str__(self):
         return self.show.nom + " - " + self.nom
@@ -26,6 +31,10 @@ class VideoType(models.Model):
     MAX_LENGTH = 200
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
+    ruta = models.CharField(max_length=MAX_LENGTH,
+                            help_text="Ruta d'aquest tipus dins de cada sèrie.",
+                            default="",
+                            blank=True)
 
     def __str__(self):
         return self.nom
@@ -40,8 +49,11 @@ class Video(models.Model):
     episodi = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
                                 help_text="Episodi associat a la preqüela o seqüela.")
     tipus = models.ForeignKey(VideoType, on_delete=models.CASCADE, null=True)
-    url = models.URLField(max_length=MAX_LENGTH, unique=True)
-    fitxer = models.FileField(max_length=MAX_LENGTH, null=True)
+    video_url = models.URLField(max_length=MAX_LENGTH)
+    fitxer = models.FileField(max_length=MAX_LENGTH, upload_to=move_file, null=True)
     thumbnail = models.ImageField(max_length=MAX_LENGTH, blank=True)
     encodar = models.BooleanField(default=False)
     subtitols = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.nom
