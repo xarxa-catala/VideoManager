@@ -4,6 +4,8 @@ from dashboard.models import Video
 from .move_file import move_file
 from VideoManager.constants import *
 from pymediainfo import MediaInfo
+from .encoding_queue import queue, do_encode
+from threading import Thread
 import ffmpeg
 import os
 
@@ -35,7 +37,7 @@ def encode(sender, instance, **kwargs):
                     command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="copy")
                 else:
                     command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264")
-                ffmpeg.run_async(command)
-                # change url
-                # delete old file
+                queue.put(command)
+                worker = Thread(target=do_encode, args=[queue, instance], daemon=True)
+                worker.start()
                 break
