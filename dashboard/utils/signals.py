@@ -33,6 +33,8 @@ def encode(sender, instance, **kwargs):
                                         acodec="libmp3lame",
                                         vcodec="libx264",
                                         vf='subtitles=' + filename)
+                elif track.writing_library is None:
+                    command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264")
                 elif track.writing_library.startswith("x264"):
                     command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="copy")
                 else:
