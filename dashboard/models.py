@@ -57,3 +57,11 @@ class Video(models.Model):
 
     def __str__(self):
         return self.nom
+
+
+class Playlist(models.Model):
+    MAX_LENGTH = 200
+    id = models.AutoField(primary_key=True)
+    nom = models.CharField(max_length=MAX_LENGTH)
+    videos = models.ManyToManyField(Video)
+    player = models.TextField()
