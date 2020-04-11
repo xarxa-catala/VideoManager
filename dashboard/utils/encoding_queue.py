@@ -7,11 +7,12 @@ import os
 def do_encode(q, instance):
     while q.qsize() > 1:
         q.join()
-    ffmpeg.run(q.get())
+    ffmpeg.run(q.queue[0])  # I want the object but I don't want to remove it yet.
     os.remove(os.path.join(MEDIA_ROOT_SAVED, instance.fitxer.name))
     instance.video_url = os.path.splitext(instance.video_url)[0] + ".mp4"
     instance.fitxer.name = os.path.splitext(instance.fitxer.name)[0] + ".mp4"
     instance.save()
+    q.get()  # Now remove the object.
     q.task_done()
 
 
