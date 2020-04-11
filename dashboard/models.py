@@ -2,7 +2,6 @@ from django.db import models
 from .utils.move_file import move_file
 
 
-# Create your models here.
 class Show(models.Model):
     MAX_LENGTH = 200
     id = models.AutoField(primary_key=True)
@@ -64,4 +63,4 @@ class Playlist(models.Model):
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
     videos = models.ManyToManyField(Video)
-    player = models.TextField()
+    player = models.TextField(null=True)

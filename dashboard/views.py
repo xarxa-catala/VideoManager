@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from dashboard.utils.encoding_queue import queue
 
-# Create your views here.
+
+def queue_view(request):
+    queue_list = list(queue.queue)
+    data = []
+    for q in queue_list:
+        data.append(str(q)[str(q).find("filename"):str(q).find(' ', str(q).find("filename"))-1])
+
+    return JsonResponse(data, safe=False)

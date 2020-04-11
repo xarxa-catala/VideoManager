@@ -165,3 +165,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = MEDIA_ROOT_SAVED
+MEDIA_URL = '/media/'
