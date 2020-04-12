@@ -21,7 +21,7 @@ from dashboard.views import *
 
 urlpatterns = [
     path('', admin.site.urls),
-    path('queue/', queue_view),
+    path('cua/', queue_view),
 ]
 
 
