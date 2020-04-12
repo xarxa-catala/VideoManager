@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, pre_delete
 from django.dispatch.dispatcher import receiver
 from dashboard.models import Video
 from .move_file import move_file
@@ -43,3 +43,10 @@ def encode(sender, instance, **kwargs):
                 worker = Thread(target=do_encode, args=[queue, instance], daemon=True)
                 worker.start()
                 break
+
+
+# Delete the file when it is deleted from the admin panel.
+@receiver(pre_delete, sender=Video)
+def uploader_delete(sender, instance, **kwargs):
+    # Pass false so FileField doesn't save the model.
+    instance.fitxer.delete(False)
