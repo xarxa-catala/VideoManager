@@ -1,5 +1,6 @@
 from django.db import models
 from .utils.move_file import move_file
+from sortedm2m.fields import SortedManyToManyField
 
 
 class Show(models.Model):
@@ -45,7 +46,7 @@ class Video(models.Model):
     nom = models.CharField(max_length=MAX_LENGTH)
     show = models.ForeignKey(Show, on_delete=models.CASCADE, null=True)
     season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True, blank=True)
-    episodi = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,
+    episodi = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True,
                                 help_text="Episodi associat a la preqüela o seqüela.")
     tipus = models.ForeignKey(VideoType, on_delete=models.CASCADE, null=True)
     video_url = models.URLField(max_length=MAX_LENGTH)
@@ -62,5 +63,5 @@ class Playlist(models.Model):
     MAX_LENGTH = 200
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
-    videos = models.ManyToManyField(Video)
+    videos = SortedManyToManyField(Video)
     player = models.TextField(null=True)
