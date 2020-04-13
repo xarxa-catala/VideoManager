@@ -16,7 +16,7 @@ class VideoTypeAdmin(admin.ModelAdmin):
 
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'video_url', 'thumbnail')
+    list_display = ('nom', 'season', 'video_url', 'thumbnail')
     readonly_fields = ('video_url',)
 
 
