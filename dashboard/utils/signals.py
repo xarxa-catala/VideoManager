@@ -1,8 +1,9 @@
-from django.db.models.signals import pre_save, post_save, pre_delete
+from django.db.models.signals import pre_save, post_save, pre_delete, m2m_changed
 from django.dispatch.dispatcher import receiver
-from dashboard.models import Video
+from dashboard.models import Video, Playlist
 from .move_file import move_file
 from VideoManager.constants import *
+from VideoManager.settings import BASE_DIR
 from pymediainfo import MediaInfo
 from .encoding_queue import queue, do_encode
 from threading import Thread
@@ -50,3 +51,19 @@ def encode(sender, instance, **kwargs):
 def uploader_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.fitxer.delete(False)
+
+
+@receiver(m2m_changed, sender=Playlist.videos.through)
+def create_player(sender, instance, **kwargs):
+    if kwargs.get('action') == 'post_add':  # Do not trigger twice.
+        content = open(os.path.join(BASE_DIR, "dashboard/static/index.html"), "r").readlines()
+        ul_tags = [i for i, l in enumerate(content) if "ul" in l][0]
+
+        for video in instance.videos.all():
+            html_li = '<li>\n<a href="#" class="video_player_chapter" data-vsource="' + video.video_url + '">'
+            html_li += video.nom + '</a>\n</li>\n'
+            content.insert(ul_tags + 1, html_li)
+            ul_tags += 1
+
+        instance.player = ''.join(content)
+        instance.save()
