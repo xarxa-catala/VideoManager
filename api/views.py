@@ -62,3 +62,33 @@ class EpisodeViewSet(viewsets.ReadOnlyModelViewSet):
         episodes = Video.objects.filter(show__id=self.kwargs['show_id'])\
             .filter(season__id=self.kwargs['season_id']).filter(tipus__id=episode_id)
         return episodes
+
+
+class MinisodeViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        minisode_id = VideoType.objects.filter(ruta="")[0].id
+        minisodes = Video.objects.filter(show__id=self.kwargs['show_id'])\
+            .filter(season__id=self.kwargs['season_id']).filter(tipus__id=minisode_id)
+        return minisodes
+
+
+class PrequelViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        prequel_id = VideoType.objects.filter(ruta="prequels")[0].id
+        prequels = Video.objects.filter(show__id=self.kwargs['show_id']).filter(season__id=self.kwargs['season_id'])\
+            .filter(episodi__id=self.kwargs['episode_id']).filter(tipus__id=prequel_id)
+        return prequels
+
+
+class SequelViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        sequel_id = VideoType.objects.filter(ruta="sequels")[0].id
+        sequels = Video.objects.filter(show__id=self.kwargs['show_id']).filter(season__id=self.kwargs['season_id'])\
+            .filter(episodi__id=self.kwargs['episode_id']).filter(tipus__id=sequel_id)
+        return sequels
