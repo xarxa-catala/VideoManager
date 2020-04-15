@@ -30,3 +30,4 @@ migrations/
 
 VideoManager/settings_secret.py
 venv/
+gunicorn.py
