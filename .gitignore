@@ -32,3 +32,4 @@ VideoManager/settings_secret.py
 venv/
 gunicorn.py
 static/
+dashboard/player/html/player-*
