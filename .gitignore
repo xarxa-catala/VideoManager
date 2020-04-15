@@ -33,3 +33,4 @@ venv/
 gunicorn.py
 static/
 dashboard/player/html/player-*
+dashboard/player/js/jquery.min.js
