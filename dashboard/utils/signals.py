@@ -68,7 +68,7 @@ def create_player(sender, instance, **kwargs):
         filename = "player-" + str(instance.id) + ".html"
         player_html = open(os.path.join('dashboard/player/html/', filename), 'w')
         player_html.write(''.join(content))
-        instance.player = '<script src="https://gestio.multimedia.xarxacatala.cat/player/js/jquey.min.js"></script>' \
+        instance.player = '<script src="https://gestio.multimedia.xarxacatala.cat/player/js/jquery.min.js"></script>' \
                           '<script>$(function(){$("#includedContent").' \
                           'load("https://gestio.multimedia.xarxacatala.cat/player/html/' + filename + '");' \
                           '});</script><div id="includedContent"></div>'
