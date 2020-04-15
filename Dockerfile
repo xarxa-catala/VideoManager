@@ -4,7 +4,7 @@ ENV MYSQL_ROOT_PASSWORD password
 
 RUN apt-get update
 RUN apt-get install -y python3 python3-venv python3-pip git mariadb-server mariadb-client python3-dev python3-ldap libsasl2-dev python-dev libldap2-dev libssl-dev mediainfo ffmpeg x264 lame
-RUN pip3 install Django mysqlclient django-auth-ldap Pillow pymediainfo ffmpeg-python django-sortedm2m djangorestframework
+RUN pip3 install Django mysqlclient django-auth-ldap Pillow pymediainfo ffmpeg-python django-sortedm2m djangorestframework markdown
 
 # Create the database.
 RUN service mysql start &&\
