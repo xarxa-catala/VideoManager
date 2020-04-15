@@ -51,7 +51,6 @@ class Video(models.Model):
     tipus = models.ForeignKey(VideoType, on_delete=models.CASCADE, null=True)
     video_url = models.URLField(max_length=MAX_LENGTH)
     fitxer = models.FileField(max_length=MAX_LENGTH, upload_to=move_file, null=True)
-    thumbnail = models.ImageField(max_length=MAX_LENGTH, blank=True, null=True)
     encodar = models.BooleanField(default=False)
     subtitols = models.BooleanField(default=False)
 
@@ -63,5 +62,6 @@ class Playlist(models.Model):
     MAX_LENGTH = 200
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
+    thumbnail = models.ImageField(max_length=MAX_LENGTH, blank=True, null=True)
     videos = SortedManyToManyField(Video)
     player = models.TextField(null=True)

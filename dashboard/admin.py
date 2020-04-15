@@ -16,12 +16,12 @@ class VideoTypeAdmin(admin.ModelAdmin):
 
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'season', 'video_url', 'thumbnail')
+    list_display = ('nom', 'season', 'video_url')
     readonly_fields = ('video_url',)
 
 
 class PlaylistAdmin(admin.ModelAdmin):
-    list_display = ('nom',)
+    list_display = ('nom', 'thumbnail')
     readonly_fields = ('player',)
 
 
