@@ -5,20 +5,46 @@ from dashboard.models import Show, Season, VideoType, Video
 
 class APIRoot(views.APIView):
     """
-    API de Xarxa Català
+    API de Xarxa Català\n
+    Pots fer les següents consultes:\n
+    `GET /api/v1/shows/`\n
+    `GET /api/v1/shows/:show_id/seasons`\n
+    `GET /api/v1/shows/:show_id/films/`\n
+    `GET /api/v1/shows/:show_id/extras/`\n
+    `GET /api/v1/shows/:show_id/seasons/:season_id/episodes/`\n
+    `GET /api/v1/shows/:show_id/seasons/:season_id/minisodes/`\n
+
+    Fent una crida GET a aquesta pàgina pots obtenir exemples de les consultes anteriors.
     """
-    # http_method_names = ['get']
 
     def get(self, request):
         data = {
-            "shows": "https://multimedia.xarxacatala.cat/shows/",
-            "groups": "http://localhost:8000/groups/",
-            "users": "http://localhost:8000/schedules/",
+            "show": [
+                    {
+                        "id": "int",
+                        "nom": "string",
+                        "url": "string"
+                    },
+                ],
+            "season": [
+                    {
+                        "id": "int",
+                        "nom": "string",
+                        "show_id": "int",
+                        "url": "string"
+                    },
+                ],
+            "video": [
+                    {
+                        "id": "int",
+                        "nom": "string",
+                        "show_id": "int",
+                        "url": "string",
+                        "prequels": [],
+                        "sequels": []
+                    },
+                ],
         }
-
-        if not request.user.is_superuser:
-            data.pop("users")
-            data.pop("groups")
 
         return response.Response(data)
 
@@ -68,27 +94,7 @@ class MinisodeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
 
     def get_queryset(self):
-        minisode_id = VideoType.objects.filter(ruta="")[0].id
+        minisode_id = VideoType.objects.filter(ruta="minisodes")[0].id
         minisodes = Video.objects.filter(show__id=self.kwargs['show_id'])\
             .filter(season__id=self.kwargs['season_id']).filter(tipus__id=minisode_id)
         return minisodes
-
-
-class PrequelViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = VideoSerializer
-
-    def get_queryset(self):
-        prequel_id = VideoType.objects.filter(ruta="prequels")[0].id
-        prequels = Video.objects.filter(show__id=self.kwargs['show_id']).filter(season__id=self.kwargs['season_id'])\
-            .filter(episodi__id=self.kwargs['episode_id']).filter(tipus__id=prequel_id)
-        return prequels
-
-
-class SequelViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = VideoSerializer
-
-    def get_queryset(self):
-        sequel_id = VideoType.objects.filter(ruta="sequels")[0].id
-        sequels = Video.objects.filter(show__id=self.kwargs['show_id']).filter(season__id=self.kwargs['season_id'])\
-            .filter(episodi__id=self.kwargs['episode_id']).filter(tipus__id=sequel_id)
-        return sequels

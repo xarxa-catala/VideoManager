@@ -33,17 +33,19 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('id', 'nom', 'show_id', 'url', 'episodi', 'prequels', 'sequels')
+        fields = ('id', 'nom', 'show_id', 'url', 'prequels', 'sequels')
 
     def get_url(self, obj):
         return obj.video_url
 
     def get_prequels(self, obj):
         prequel_id = VideoType.objects.filter(ruta="prequels")[0].id
-        prequels = [v for v in obj.video_set.all() if v.tipus == prequel_id]
+        prequels = [{"id": v.id, "nom": v.nom, "url": v.video_url}
+                    for v in obj.video_set.all() if v.tipus.id == prequel_id]
         return prequels
 
     def get_sequels(self, obj):
         sequel_id = VideoType.objects.filter(ruta="sequels")[0].id
-        sequels = [v for v in obj.video_set.all() if v.tipus == sequel_id]
+        sequels = [{"id": v.id, "nom": v.nom, "url": v.video_url}
+                    for v in obj.video_set.all() if v.tipus.id == sequel_id]
         return sequels
