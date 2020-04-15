@@ -57,7 +57,7 @@ def uploader_delete(sender, instance, **kwargs):
 def create_player(sender, instance, **kwargs):
     if kwargs.get('action') == 'post_add':  # Do not trigger twice.
         content = open(os.path.join(BASE_DIR, "dashboard/static/index.html"), "r").readlines()
-        ul_tags = [i for i, l in enumerate(content) if "ul" in l][0]
+        ul_tags = [i for i, l in enumerate(content) if "<ul id" in l][0]
 
         for video in instance.videos.all():
             html_li = '<li>\n<a href="#" class="video_player_chapter" data-vsource="' + video.video_url + '">'
