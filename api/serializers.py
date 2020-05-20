@@ -16,8 +16,12 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
         return os.path.join(URL, obj.ruta)
 
     def get_thumbnail(self, obj):
-        filename = os.path.basename(obj.picture.url)
-        return os.path.join(URL, filename)
+        try:
+            filename = os.path.basename(obj.picture.url)
+            url = os.path.join(URL, filename)
+        except ValueError:
+            url = ""
+        return url
 
 
 class SeasonSerializer(serializers.HyperlinkedModelSerializer):
