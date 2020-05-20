@@ -9,6 +9,7 @@ class Show(models.Model):
     nom = models.CharField(max_length=MAX_LENGTH)
     nom_curt = models.CharField(max_length=MAX_LENGTH, unique=True, null=True)
     ruta = models.CharField(max_length=MAX_LENGTH, default="")
+    picture = models.ImageField(max_length=MAX_LENGTH, blank=True, null=True)
 
     def __str__(self):
         return self.nom
@@ -62,6 +63,5 @@ class Playlist(models.Model):
     MAX_LENGTH = 200
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
-    thumbnail = models.ImageField(max_length=MAX_LENGTH, blank=True, null=True)
     videos = SortedManyToManyField(Video)
     player = models.TextField(null=True)

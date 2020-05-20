@@ -23,7 +23,8 @@ class APIRoot(views.APIView):
                     {
                         "id": "int",
                         "nom": "string",
-                        "url": "string"
+                        "url": "string",
+                        "thumbnail": "string"
                     },
                 ],
             "season": [
@@ -39,6 +40,7 @@ class APIRoot(views.APIView):
                         "id": "int",
                         "nom": "string",
                         "show_id": "int",
+                        "season_id": "int",
                         "url": "string",
                         "prequels": [],
                         "sequels": []

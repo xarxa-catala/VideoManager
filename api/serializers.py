@@ -6,6 +6,7 @@ import os
 
 class ShowSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
+    thumbnail = serializers.SerializerMethodField('get_thumbnail')
 
     class Meta:
         model = Show
@@ -13,6 +14,10 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_url(self, obj):
         return os.path.join(URL, obj.ruta)
+
+    def get_thumbnail(self, obj):
+        filename = os.path.basename(obj.picture.url)
+        return os.path.join(URL, filename)
 
 
 class SeasonSerializer(serializers.HyperlinkedModelSerializer):
@@ -33,7 +38,7 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Video
-        fields = ('id', 'nom', 'show_id', 'url', 'prequels', 'sequels')
+        fields = ('id', 'nom', 'show_id', 'season_id', 'url', 'prequels', 'sequels')
 
     def get_url(self, obj):
         return obj.video_url
