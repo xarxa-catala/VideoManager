@@ -10,7 +10,7 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Show
-        fields = ('id', 'nom', 'url')
+        fields = ('id', 'nom', 'thumbnail', 'url')
 
     def get_url(self, obj):
         return os.path.join(URL, obj.ruta)
