@@ -171,5 +171,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = STATIC_ROOT_SAVED
 
-MEDIA_ROOT = MEDIA_ROOT_SAVED
+MEDIA_ROOT = os.path.join(MEDIA_ROOT_SAVED, "VideoManagerMedia")
 MEDIA_URL = '/media/'
