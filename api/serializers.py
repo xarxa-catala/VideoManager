@@ -18,10 +18,9 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
     def get_thumbnail(self, obj):
         try:
             filename = os.path.basename(obj.picture.url)
-            url = os.path.join(URL, filename)
         except ValueError:
-            url = ""
-        return url
+            filename = "default.png"
+        return os.path.join(URL, os.path.basename(MEDIA_ROOT_SAVED), filename)
 
 
 class SeasonSerializer(serializers.HyperlinkedModelSerializer):
