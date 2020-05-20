@@ -4,7 +4,7 @@ from dashboard.models import Video, Show, Season, VideoType, Playlist
 
 # Register your models here.
 class ShowAdmin(admin.ModelAdmin):
-    list_display = ('nom_curt', 'nom')
+    list_display = ('nom_curt', 'nom', 'picture')
 
 
 class SeasonAdmin(admin.ModelAdmin):
@@ -21,7 +21,7 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 class PlaylistAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'thumbnail')
+    list_display = ('nom',)
     readonly_fields = ('player',)
 
 
