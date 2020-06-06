@@ -1,5 +1,5 @@
 from django.db import models
-from .utils.move_file import move_file
+from .utils.move_file import move_file, move_picture
 from sortedm2m.fields import SortedManyToManyField
 
 
@@ -9,7 +9,7 @@ class Show(models.Model):
     nom = models.CharField(max_length=MAX_LENGTH)
     nom_curt = models.CharField(max_length=MAX_LENGTH, unique=True, null=True)
     ruta = models.CharField(max_length=MAX_LENGTH, default="")
-    picture = models.ImageField(max_length=MAX_LENGTH, blank=True, null=True)
+    picture = models.ImageField(max_length=MAX_LENGTH, upload_to=move_picture, blank=True, null=True)
 
     def __str__(self):
         return self.nom

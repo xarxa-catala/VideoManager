@@ -8,3 +8,6 @@ def move_file(instance, filename):
         final_path = os.path.join(instance.show.ruta, instance.season.ruta, instance.tipus.ruta, filename)
 
     return final_path
+
+def move_picture(instance, filename):
+    return os.path.join('VideoManagerMedia', filename)
