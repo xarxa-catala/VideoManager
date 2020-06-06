@@ -20,7 +20,7 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
             filename = os.path.basename(obj.picture.url)
         except ValueError:
             filename = "default.png"
-        return os.path.join(URL, os.path.basename(MEDIA_ROOT_SAVED), filename)
+        return os.path.join(URL, os.path.basename(MEDIA_ROOT_SAVED), 'VideoManagerMedia', filename)
 
 
 class SeasonSerializer(serializers.HyperlinkedModelSerializer):
