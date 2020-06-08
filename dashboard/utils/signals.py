@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_save, post_save, pre_delete, m2m_changed
+from django.db.models.signals import post_save, pre_delete, m2m_changed
 from django.dispatch.dispatcher import receiver
 from dashboard.models import Video, Playlist
 from .move_file import move_file
@@ -11,10 +11,19 @@ import ffmpeg
 import os
 
 
-@receiver(pre_save, sender=Video)
+@receiver(post_save, sender=Video)
 def generate_url(sender, instance, **kwargs):
+    if hasattr(instance, '_dirty'):
+        return
+
     filename = os.path.basename(instance.fitxer.name)
     instance.video_url = os.path.join(URL, move_file(instance, filename))
+
+    try:
+        instance._dirty = True
+        instance.save()
+    finally:
+        del instance._dirty
 
 
 @receiver(post_save, sender=Video)
