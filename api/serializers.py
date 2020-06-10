@@ -19,7 +19,7 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
         try:
             filename = os.path.basename(obj.picture.url)
         except ValueError:
-            filename = "default.png"
+            filename = "default.jpg"
         return os.path.join(URL, 'VideoManagerMedia', filename)
 
 
