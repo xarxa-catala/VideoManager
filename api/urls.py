@@ -9,6 +9,9 @@ router.register(r'shows/(?P<show_id>.+)/films', views.FilmViewSet, basename='api
 router.register(r'shows/(?P<show_id>.+)/extras', views.ExtraViewSet, basename='api/v1')
 router.register(r'shows/(?P<show_id>.+)/seasons/(?P<season_id>.+)/episodes', views.EpisodeViewSet, basename='api/v1')
 router.register(r'shows/(?P<show_id>.+)/seasons/(?P<season_id>.+)/minisodes', views.MinisodeViewSet, basename='api/v1')
+router.register(r'shows/(?P<show_id>.+)/playlists', views.PlaylistViewSet, basename='api/v1')
+router.register(r'shows/(?P<show_id>.+)/playlists/(?P<playlist_id>.+)/videos',
+                views.PlaylistVideoViewSet, basename='api/v1')
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dashboard.models import Show, Season, Video, VideoType
+from dashboard.models import Show, Season, Video, VideoType, Playlist
 from VideoManager.constants import *
 import os
 
@@ -57,3 +57,9 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
         sequels = [{"id": v.id, "nom": v.nom, "url": v.video_url}
                     for v in obj.video_set.all() if v.tipus.id == sequel_id]
         return sequels
+
+
+class PlaylistSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Playlist
+        fields = ('id', 'nom', 'show_id', 'app')

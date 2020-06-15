@@ -8,11 +8,13 @@ class APIRoot(views.APIView):
     API de Xarxa Català\n
     Pots fer les següents consultes:\n
     `GET /api/v1/shows/`\n
-    `GET /api/v1/shows/:show_id/seasons`\n
+    `GET /api/v1/shows/:show_id/seasons/`\n
     `GET /api/v1/shows/:show_id/films/`\n
     `GET /api/v1/shows/:show_id/extras/`\n
+    `GET /api/v1/shows/:show_id/playlists/`\n
     `GET /api/v1/shows/:show_id/seasons/:season_id/episodes/`\n
     `GET /api/v1/shows/:show_id/seasons/:season_id/minisodes/`\n
+    `GET /api/v1/shows/:show_id/playlists/:playlist_id/videos/`\n
 
     Fent una crida GET a aquesta pàgina pots obtenir exemples de les consultes anteriors.
     """
@@ -46,6 +48,14 @@ class APIRoot(views.APIView):
                         "sequels": []
                     },
                 ],
+            "playlist": [
+                {
+                    "id": "int",
+                    "nom": "string",
+                    "show_id": "int",
+                    "app": "bool"
+                }
+            ],
         }
 
         return response.Response(data)
@@ -100,3 +110,19 @@ class MinisodeViewSet(viewsets.ReadOnlyModelViewSet):
         minisodes = Video.objects.filter(show__id=self.kwargs['show_id'])\
             .filter(season__id=self.kwargs['season_id']).filter(tipus__id=minisode_id)
         return minisodes
+
+
+class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PlaylistSerializer
+
+    def get_queryset(self):
+        playlists = Playlist.objects.filter(show__id=self.kwargs['show_id'])
+        return playlists
+
+
+class PlaylistVideoViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        videos = Playlist.objects.filter(id=self.kwargs['playlist_id']).first().videos.all()
+        return videos
