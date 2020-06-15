@@ -21,7 +21,7 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 class PlaylistAdmin(admin.ModelAdmin):
-    list_display = ('nom',)
+    list_display = ('nom', 'show', 'app')
     readonly_fields = ('player',)
 
 

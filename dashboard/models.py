@@ -63,5 +63,8 @@ class Playlist(models.Model):
     MAX_LENGTH = 200
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH)
+    show = models.ForeignKey(Show, on_delete=models.CASCADE, null=True)
     videos = SortedManyToManyField(Video)
+    app = models.BooleanField(default=False, help_text="Marca aquesta casella si vols que "
+                                                       "la llista de reproducció sigui visible a l'app.")
     player = models.TextField(null=True)
