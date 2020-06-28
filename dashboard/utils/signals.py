@@ -32,7 +32,8 @@ def encode(sender, instance, **kwargs):
     output = os.path.splitext(filename)[0] + ".mp4"
 
     if (instance.subtitols or instance.encodar) and not os.path.exists(output):
-        async_task('dashboard.utils.tasks.encode', instance, filename, output, task_name=instance.fitxer.name)
+        async_task('dashboard.utils.tasks.encode', instance, filename, output,
+                   task_name=instance.fitxer.name, q_options={'scheduler': False})
 
     try:
         instance._dirty = True
