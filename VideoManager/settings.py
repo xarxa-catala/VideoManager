@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sortedm2m',
     'rest_framework',
+    'django_q',
 ]
 
 MIDDLEWARE = [
@@ -149,6 +150,16 @@ AUTH_LDAP_USER_FLAGS_BY_GROUP = {
 AUTH_LDAP_MIRROR_GROUPS = True
 # For more granular permissions, we can map LDAP groups to Django groups.
 AUTH_LDAP_FIND_GROUP_PERMS = True
+
+
+# Django Q
+Q_CLUSTER = {
+    'name': 'VideoManager',
+    'workers': 7,
+    'retry': 12000,
+    'bulk': 10,
+    'orm': 'default'
+}
 
 
 # Internationalization
