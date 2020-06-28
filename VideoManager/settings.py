@@ -155,10 +155,11 @@ AUTH_LDAP_FIND_GROUP_PERMS = True
 # Django Q
 Q_CLUSTER = {
     'name': 'VideoManager',
-    'workers': 7,
-    'retry': 12000,
-    'bulk': 10,
-    'orm': 'default'
+    'workers': 4,
+    'retry': 11000,
+    'queue_limit': 50,
+    'orm': 'default',
+    'label': 'Encodeig',
 }
 
 

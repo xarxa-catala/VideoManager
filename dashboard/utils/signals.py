@@ -4,10 +4,7 @@ from dashboard.models import Video, Playlist
 from .move_file import move_file
 from VideoManager.constants import *
 from VideoManager.settings import BASE_DIR
-from pymediainfo import MediaInfo
-from .encoding_queue import queue, do_encode
-from threading import Thread
-import ffmpeg
+from django_q.tasks import async_task
 import os
 
 
@@ -28,31 +25,20 @@ def generate_url(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Video)
 def encode(sender, instance, **kwargs):
+    if hasattr(instance, '_dirty'):
+        return
+
     filename = os.path.join(MEDIA_ROOT_SAVED, instance.fitxer.name)
     output = os.path.splitext(filename)[0] + ".mp4"
 
     if (instance.subtitols or instance.encodar) and not os.path.exists(output):
-        input_file = ffmpeg.input(filename)
-        audio = input_file.audio
-        video = input_file.video
+        async_task('dashboard.utils.tasks.encode', instance, filename, output, task_name=instance.fitxer.name)
 
-        for track in MediaInfo.parse(filename).tracks:
-            if track.track_type == 'Video':
-                if instance.subtitols:
-                    command = ffmpeg.output(audio, video, output,
-                                        acodec="libmp3lame",
-                                        vcodec="libx264",
-                                        vf='subtitles=' + filename)
-                elif track.writing_library is None:
-                    command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264")
-                elif track.writing_library.startswith("x264"):
-                    command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="copy")
-                else:
-                    command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264")
-                queue.put(command)
-                worker = Thread(target=do_encode, args=[queue, instance], daemon=True)
-                worker.start()
-                break
+    try:
+        instance._dirty = True
+        instance.save()
+    finally:
+        del instance._dirty
 
 
 # Delete the file when it is deleted from the admin panel.
