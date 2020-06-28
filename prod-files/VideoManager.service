@@ -1,0 +1,21 @@
+[Unit]
+Description=VideoManager WSGI Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+User=multimedia
+Group=nogroup
+PIDFile=/tmp/VideoManager.pid
+WorkingDirectory=/opt/VideoManager
+
+ExecStart=/opt/VideoManager/venv/bin/gunicorn --pid /tmp/VideoManager.pid --pythonpath /opt/VideoManager --config /opt/VideoManager/gunicorn.py VideoManager.wsgi
+
+Restart=on-failure
+RestartSec=30
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

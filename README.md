@@ -37,3 +37,11 @@ docker build --tag=xarxacat-video .
 ```bash
 docker run -it -p 8000:8000 -v $(pwd):/app xarxacat-video
 ```
+
+## Producció
+El VideoManager utilitza dos serveis separats per funcionar:
+
+* **VideoManager:** és el gestor (Django) com a tal. Dona accés a la web, etc.
+* **QClusterVideoManager:** s'ocupa de codificar vídeos en segon pla (django-q).
+
+Tots dos fitxers i la configuració del servidor web (nginx) es troben al directori `prod-files`.

@@ -1,0 +1,21 @@
+[Unit]
+Description=Django QCluster for VideoManager Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+User=multimedia
+Group=nogroup
+PIDFile=/tmp/VideoManager.pid
+WorkingDirectory=/opt/VideoManager
+
+ExecStart=/opt/VideoManager/venv/bin/python3 manage.py qcluster
+
+Restart=on-failure
+RestartSec=30
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
