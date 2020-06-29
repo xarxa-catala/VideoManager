@@ -16,7 +16,7 @@ class APIRoot(views.APIView):
     `GET /api/v1/shows/:show_id/seasons/:season_id/episodes/`\n
     `GET /api/v1/shows/:show_id/seasons/:season_id/minisodes/`\n
     `GET /api/v1/shows/:show_id/playlists/:playlist_id/videos/`\n
-    `GET /api/v1/app/version/`\n
+    `GET /api/v1/app/versions/`\n
 
     Fent una crida GET a aquesta pàgina pots obtenir exemples de les consultes anteriors.
     """
