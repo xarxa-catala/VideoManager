@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from dashboard.models import Show, Season, Video, VideoType, Playlist
+from api.models import AppVersion
 from VideoManager.constants import *
 import os
 
@@ -55,7 +56,7 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
     def get_sequels(self, obj):
         sequel_id = VideoType.objects.filter(ruta="sequels")[0].id
         sequels = [{"id": v.id, "nom": v.nom, "url": v.video_url}
-                    for v in obj.video_set.all() if v.tipus.id == sequel_id]
+                   for v in obj.video_set.all() if v.tipus.id == sequel_id]
         return sequels
 
 
@@ -63,3 +64,9 @@ class PlaylistSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Playlist
         fields = ('id', 'nom', 'show_id', 'app')
+
+
+class AppVersionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = AppVersion
+        fields = ('id', 'versionCode', 'versionString')

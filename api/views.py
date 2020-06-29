@@ -1,6 +1,7 @@
 from rest_framework import viewsets, views, response
 from .serializers import *
 from dashboard.models import Show, Season, VideoType, Video
+from api.models import AppVersion
 
 
 class APIRoot(views.APIView):
@@ -15,6 +16,7 @@ class APIRoot(views.APIView):
     `GET /api/v1/shows/:show_id/seasons/:season_id/episodes/`\n
     `GET /api/v1/shows/:show_id/seasons/:season_id/minisodes/`\n
     `GET /api/v1/shows/:show_id/playlists/:playlist_id/videos/`\n
+    `GET /api/v1/app/version/`\n
 
     Fent una crida GET a aquesta pàgina pots obtenir exemples de les consultes anteriors.
     """
@@ -49,13 +51,20 @@ class APIRoot(views.APIView):
                     },
                 ],
             "playlist": [
-                {
-                    "id": "int",
-                    "nom": "string",
-                    "show_id": "int",
-                    "app": "bool"
-                }
-            ],
+                    {
+                        "id": "int",
+                        "nom": "string",
+                        "show_id": "int",
+                        "app": "bool"
+                    }
+                ],
+            "version": [
+                    {
+                        "id": "int",
+                        "versionCode": "int",
+                        "versionString": "string"
+                    }
+                ],
         }
 
         return response.Response(data)
@@ -126,3 +135,8 @@ class PlaylistVideoViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         videos = Playlist.objects.filter(id=self.kwargs['playlist_id']).first().videos.all()
         return videos
+
+
+class AppVersionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = AppVersion.objects.all().order_by('id')
+    serializer_class = AppVersionSerializer
