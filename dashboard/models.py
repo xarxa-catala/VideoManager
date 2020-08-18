@@ -50,7 +50,7 @@ class Video(models.Model):
     episodi = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True,
                                 help_text="Episodi associat a la preqüela o seqüela.")
     tipus = models.ForeignKey(VideoType, on_delete=models.CASCADE, null=True)
-    video_url = models.URLField(max_length=MAX_LENGTH)
+    video_url = models.URLField(max_length=MAX_LENGTH, null=True, blank=True)
     fitxer = models.FileField(max_length=MAX_LENGTH, upload_to=move_file, null=True)
     encodar = models.BooleanField(default=False)
     subtitols = models.BooleanField(default=False)
