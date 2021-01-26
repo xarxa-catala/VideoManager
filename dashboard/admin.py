@@ -17,6 +17,7 @@ class VideoTypeAdmin(admin.ModelAdmin):
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('nom', 'season', 'video_url')
+    search_fields = ('nom',)
 
 
 class PlaylistAdmin(admin.ModelAdmin):
