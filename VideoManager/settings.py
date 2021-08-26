@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'sortedm2m',
     'rest_framework',
     'django_q',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
