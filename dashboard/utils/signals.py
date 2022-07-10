@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_delete, m2m_changed
+from django.db.models.signals import pre_save, post_save, pre_delete, m2m_changed
 from django.dispatch.dispatcher import receiver
 from dashboard.models import Video, Playlist
 from .move_file import move_file
@@ -8,13 +8,23 @@ from django_q.tasks import async_task
 import os
 
 
+@receiver(pre_save, sender=Video)
+def model_pre_save(sender, instance, **kwargs):
+    try:
+        instance._pre_save_instance = Video.objects.get(pk=instance.pk)
+    except Video.DoesNotExist:
+        instance._pre_save_instance = instance
+
+
 @receiver(post_save, sender=Video)
 def generate_url(sender, instance, **kwargs):
     if hasattr(instance, '_dirty'):
         return
 
-    filename = os.path.basename(instance.fitxer.name)
-    instance.video_url = os.path.join(URL, move_file(instance, filename))
+    prev_instance = instance._pre_save_instance
+    if prev_instance.video_url == instance.video_url or prev_instance.fitxer != instance.fitxer:
+        filename = os.path.basename(instance.fitxer.name)
+        instance.video_url = os.path.join(URL, move_file(instance, filename))
 
     try:
         instance._dirty = True
