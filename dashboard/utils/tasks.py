@@ -15,13 +15,14 @@ def encode(instance, filename, output):
                 command = ffmpeg.output(audio, video, output,
                                         acodec="libmp3lame",
                                         vcodec="libx264",
+                                        crf=20,
                                         vf='subtitles=' + filename)
             elif track.writing_library is None:
-                command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264")
+                command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264", crf=20)
             elif track.writing_library.startswith("x264"):
                 command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="copy")
             else:
-                command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264")
+                command = ffmpeg.output(audio, video, output, acodec="libmp3lame", vcodec="libx264", crf=20)
 
             ffmpeg.run(command)
             os.remove(os.path.join(MEDIA_ROOT_SAVED, instance.fitxer.name))
