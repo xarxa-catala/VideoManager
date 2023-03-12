@@ -1,4 +1,5 @@
 from rest_framework import viewsets, views, response
+from django.shortcuts import get_object_or_404
 from .serializers import *
 from dashboard.models import Show, Season, VideoType, Video
 from api.models import AppVersion
@@ -87,7 +88,7 @@ class VideoViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
 
     def get_queryset(self):
-        return Video.objects.filter(id=self.kwargs['video_id'])
+        return get_object_or_404(Video, id=self.kwargs['video_id'])
 
 class FilmViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
