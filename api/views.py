@@ -16,6 +16,7 @@ class APIRoot(views.APIView):
     `GET /api/v1/shows/:show_id/seasons/:season_id/episodes/`\n
     `GET /api/v1/shows/:show_id/seasons/:season_id/minisodes/`\n
     `GET /api/v1/shows/:show_id/playlists/:playlist_id/videos/`\n
+    `GET /api/v1/videos/:video_id/`\n
     `GET /api/v1/app/versions/`\n
 
     Fent una crida GET a aquesta pàgina pots obtenir exemples de les consultes anteriors.
@@ -86,7 +87,7 @@ class VideoViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
 
     def get_queryset(self):
-        return Video.objects.filter(video__id=self.kwargs['video_id'])
+        return Video.objects.filter(id=self.kwargs['video_id'])
 
 class FilmViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
