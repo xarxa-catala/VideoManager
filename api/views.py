@@ -87,7 +87,7 @@ class VideoViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
 
     def get_queryset(self):
-        return Video.objects.get(id=self.kwargs['video_id'])
+        return Video.objects.filter(id=self.kwargs['video_id'])
 
 class FilmViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
