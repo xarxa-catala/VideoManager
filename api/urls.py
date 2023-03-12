@@ -12,6 +12,7 @@ router.register(r'shows/(?P<show_id>.+)/seasons/(?P<season_id>.+)/minisodes', vi
 router.register(r'shows/(?P<show_id>.+)/playlists', views.PlaylistViewSet, basename='api/v1')
 router.register(r'shows/(?P<show_id>.+)/playlists/(?P<playlist_id>.+)/videos',
                 views.PlaylistVideoViewSet, basename='api/v1')
+router.register(r'videos/(?P<video_id>.+)', views.VideoViewSet, basename='api/v1')
 router.register(r'app/versions', views.AppVersionViewSet, basename='api/v1')
 
 # Wire up our API using automatic URL routing.

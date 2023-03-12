@@ -82,6 +82,11 @@ class SeasonViewSet(viewsets.ReadOnlyModelViewSet):
         seasons = Season.objects.filter(show__id=self.kwargs['show_id'])
         return seasons
 
+class VideoViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        return Video.objects.filter(video__id=self.kwargs['video_id'])
 
 class FilmViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VideoSerializer
