@@ -57,25 +57,3 @@ def encode(sender, instance, **kwargs):
 def uploader_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.fitxer.delete(False)
-
-
-@receiver(m2m_changed, sender=Playlist.videos.through)
-def create_player(sender, instance, **kwargs):
-    if kwargs.get('action') == 'post_add':  # Do not trigger twice.
-        content = open(os.path.join(BASE_DIR, "dashboard/player/html/index.html"), "r").readlines()
-        ul_tags = [i for i, l in enumerate(content) if "<ul id" in l][0]
-
-        for video in instance.videos.all():
-            html_li = '<li>\n<a href="#" class="video_player_chapter" data-vsource="' + video.video_url + '">'
-            html_li += video.nom + '</a>\n</li>\n'
-            content.insert(ul_tags + 1, html_li)
-            ul_tags += 1
-
-        filename = "player-" + str(instance.id) + ".html"
-        player_html = open(os.path.join('dashboard/player/html/', filename), 'w')
-        player_html.write(''.join(content))
-        instance.player = '<script src="https://gestio.multimedia.xarxacatala.cat/player/js/jquery.min.js"></script>' \
-                          '<script>$(function(){$("#includedContent").' \
-                          'load("https://gestio.multimedia.xarxacatala.cat/player/html/' + filename + '");' \
-                          '});</script><div id="includedContent"></div>'
-        instance.save()
