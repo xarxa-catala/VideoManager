@@ -1,6 +1,7 @@
 from rest_framework import viewsets, views, response
 from .serializers import *
 from dashboard.models import Show, Video
+from django.shortcuts import get_object_or_404
 from api.models import AppVersion
 
 
@@ -65,15 +66,16 @@ class APIRoot(views.APIView):
         return response.Response(data)
 
 
-class ShowViewSet(viewsets.ReadOnlyModelViewSet):
+class ShowViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = Show.objects.all().order_by('id')
         serializer = ShowSerializer(queryset, many=True, context={'exclude_fields': ['playlists']})
         return response.Response(serializer.data)
 
-    def retrieve(self, request):
+    def retrieve(self, request, pk=None):
         queryset = Show.objects.all().order_by('id')
-        serializer = ShowSerializer(queryset, many=True)
+        show = get_object_or_404(queryset, pk=pk)
+        serializer = ShowSerializer(show)
         return response.Response(serializer.data)
 
 
