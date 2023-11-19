@@ -73,8 +73,10 @@ class ShowViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SingleShowViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Show.objects.all().order_by('id')
-    serializer_class = ShowSerializer
+    serializer = ShowSerializer
+
+    def get_queryset(self):
+        return Show.objects.filter(id=self.kwargs['show_id'])
 
 
 class VideoViewSet(viewsets.ReadOnlyModelViewSet):
