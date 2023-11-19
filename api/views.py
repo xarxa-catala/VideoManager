@@ -80,13 +80,6 @@ class SingleShowViewSet(viewsets.ReadOnlyModelViewSet):
         return Show.objects.filter(id=self.kwargs['show_id'])
 
 
-class VideoViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = VideoSerializer
-
-    def get_queryset(self):
-        return Video.objects.filter(id=self.kwargs['video_id'])
-
-
 class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PlaylistSerializer
 
@@ -108,6 +101,33 @@ class SinglePlaylistViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return Playlist.objects.filter(id=self.kwargs['playlist_id'])
+
+
+class PlaylistShowViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PlaylistSerializer
+
+    def get_queryset(self):
+        return Playlist.objects.filter(show__id=self.kwargs['show_id'])
+
+
+class VideoViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Video.objects.all().order_by('id')
+    serializer_class = VideoSerializer
+
+
+class SingleVideoViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        return Video.objects.filter(id=self.kwargs['video_id'])
+
+
+class VideoPlaylistViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        videos = Playlist.objects.filter(id=self.kwargs['playlist_id']).first().videos.all()
+        return videos
 
 
 class AppVersionViewSet(viewsets.ReadOnlyModelViewSet):
