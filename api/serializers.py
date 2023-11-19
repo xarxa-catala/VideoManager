@@ -32,7 +32,7 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
         except ValueError:
             return None
     def get_playlists(self, obj):
-        return Playlist.objects.filter(show__id=self.kwargs['show_id'])
+        return Playlist.objects.filter(show__id=obj.id)
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
