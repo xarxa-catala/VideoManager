@@ -11,8 +11,8 @@ class APIRoot(views.APIView):
     `GET /api/v2/shows/`\n
     `GET /api/v2/shows/:show_id/`\n
     `GET /api/v2/shows/:show_id/playlists/`\n
-    `GET /api/v2/shows/playlists/:playlist_id/`\n
-    `GET /api/v2/shows/playlists/:playlist_id/videos/`\n
+    `GET /api/v2/playlists/:playlist_id/`\n
+    `GET /api/v2/playlists/:playlist_id/videos/`\n
     `GET /api/v2/videos/:video_id/`\n
     `GET /api/v2/app/versions/`\n
 
@@ -63,6 +63,16 @@ class APIRoot(views.APIView):
 
 
 class ShowViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Show.objects.all().order_by('id')
+    serializer_class = ShowSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['exclude_fields'] = ['playlists']
+        return context
+
+
+class SingleShowViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Show.objects.all().order_by('id')
     serializer_class = ShowSerializer
 

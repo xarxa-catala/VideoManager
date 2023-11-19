@@ -25,10 +25,20 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
     cover = serializers.SerializerMethodField('get_cover')
     playlists = serializers.SerializerMethodField('get_playlists')
 
-
     class Meta:
         model = Show
         fields = ('id', 'nom', 'description', 'thumbnail', 'cover', 'url', 'playlists')
+
+    def get_fields(self):
+        fields = super().get_fields()
+
+        exclude_fields = self.context.get('exclude_fields', [])
+        for field in exclude_fields:
+            # providing a default prevents a KeyError
+            # if the field does not exist
+            fields.pop(field, default=None)
+
+        return fields
 
     def get_url(self, obj):
         return os.path.join(URL, obj.ruta)
