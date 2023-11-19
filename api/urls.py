@@ -6,7 +6,7 @@ from . import views
 api_basename = ApiConfig.name + '/' + ApiConfig.version
 router = routers.SimpleRouter()
 router.register(r'shows', views.ShowViewSet, basename=api_basename)
-router.register(r'shows/(?P<show_id>.+)', views.ShowViewSet, basename=api_basename)
+router.register(r'shows/(?P<show_id>.+)', views.SingleShowViewSet, basename=api_basename)
 router.register(r'shows/(?P<show_id>.+)/playlists', views.PlaylistViewSet, basename=api_basename)
 router.register(r'playlists/(?P<playlist_id>.+)', views.PlaylistViewSet, basename=api_basename)
 router.register(r'playlists/(?P<playlist_id>.+)/videos',
