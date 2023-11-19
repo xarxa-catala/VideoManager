@@ -1,19 +1,10 @@
 from django.contrib import admin
-from dashboard.models import Video, Show, Season, VideoType, Playlist
+from dashboard.models import Video, Show, Playlist
 
 
 # Register your models here.
 class ShowAdmin(admin.ModelAdmin):
-    list_display = ('nom_curt', 'nom', 'picture')
-
-
-class SeasonAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'show')
-
-
-class VideoTypeAdmin(admin.ModelAdmin):
-    list_display = ('nom',)
-
+    list_display = ('nom_curt', 'nom', 'description', 'picture', 'picture_cover')
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('nom', 'season', 'video_url')
@@ -21,12 +12,10 @@ class VideoAdmin(admin.ModelAdmin):
 
 
 class PlaylistAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'show', 'app')
+    list_display = ('nom', 'description', 'picture', 'show', 'app')
     readonly_fields = ('player',)
 
 
 admin.site.register(Show, ShowAdmin)
-admin.site.register(Season, SeasonAdmin)
-admin.site.register(VideoType, VideoTypeAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Playlist, PlaylistAdmin)

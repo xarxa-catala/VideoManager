@@ -1,22 +1,21 @@
 from django.urls import include, path
+from api.apps import ApiConfig
 from rest_framework import routers
 from . import views
 
+api_basename = ApiConfig.name + '/' + ApiConfig.version
 router = routers.SimpleRouter()
-router.register(r'shows', views.ShowViewSet, basename='api/v1')
-router.register(r'shows/(?P<show_id>.+)/seasons', views.SeasonViewSet, basename='api/v1')
-router.register(r'shows/(?P<show_id>.+)/films', views.FilmViewSet, basename='api/v1')
-router.register(r'shows/(?P<show_id>.+)/extras', views.ExtraViewSet, basename='api/v1')
-router.register(r'shows/(?P<show_id>.+)/seasons/(?P<season_id>.+)/episodes', views.EpisodeViewSet, basename='api/v1')
-router.register(r'shows/(?P<show_id>.+)/seasons/(?P<season_id>.+)/minisodes', views.MinisodeViewSet, basename='api/v1')
-router.register(r'shows/(?P<show_id>.+)/playlists', views.PlaylistViewSet, basename='api/v1')
-router.register(r'shows/(?P<show_id>.+)/playlists/(?P<playlist_id>.+)/videos',
-                views.PlaylistVideoViewSet, basename='api/v1')
-router.register(r'videos/(?P<video_id>.+)', views.VideoViewSet, basename='api/v1')
-router.register(r'app/versions', views.AppVersionViewSet, basename='api/v1')
+router.register(r'shows', views.ShowViewSet, basename=api_basename)
+router.register(r'shows/(?P<show_id>.+)', views.ShowViewSet, basename=api_basename)
+router.register(r'shows/(?P<show_id>.+)/playlists', views.PlaylistViewSet, basename=api_basename)
+router.register(r'shows/playlists/(?P<playlist_id>.+)', views.PlaylistViewSet, basename=api_basename)
+router.register(r'shows/playlists/(?P<playlist_id>.+)/videos',
+                views.PlaylistVideoViewSet, basename=api_basename)
+router.register(r'videos/(?P<video_id>.+)', views.VideoViewSet, basename=api_basename)
+router.register(r'app/versions', views.AppVersionViewSet, basename=api_basename)
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
-    path('v1/', views.APIRoot.as_view()),
-    path('v1/', include(router.urls)),
+    path(ApiConfig.version + '/', views.APIRoot.as_view()),
+    path(ApiConfig.version + '/', include(router.urls)),
 ]

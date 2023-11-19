@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dashboard.models import Show, Season, Video, VideoType, Playlist
+from dashboard.models import Show, Video, Playlist
 from api.models import AppVersion
 from VideoManager.constants import *
 import os
@@ -8,10 +8,12 @@ import os
 class ShowSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
     thumbnail = serializers.SerializerMethodField('get_thumbnail')
+    cover = serializers.SerializerMethodField('get_cover')
+    playlists = serializers.SerializerMethodField('get_playlists')
 
     class Meta:
         model = Show
-        fields = ('id', 'nom', 'thumbnail', 'url')
+        fields = ('id', 'nom', 'description', 'thumbnail', 'cover', 'url', 'playlists')
 
     def get_url(self, obj):
         return os.path.join(URL, obj.ruta)
@@ -19,51 +21,43 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
     def get_thumbnail(self, obj):
         try:
             filename = os.path.basename(obj.picture.url)
+            return os.path.join(URL, 'VideoManagerMedia', filename)
         except ValueError:
-            filename = "default.jpg"
-        return os.path.join(URL, 'VideoManagerMedia', filename)
+            return None
 
-
-class SeasonSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.SerializerMethodField('get_url')
-
-    class Meta:
-        model = Season
-        fields = ('id', 'nom', 'show_id', 'url')
-
-    def get_url(self, obj):
-        return os.path.join(URL, obj.ruta)
+    def get_cover(self, obj):
+        try:
+            filename = os.path.basename(obj.picture_cover.url)
+            return os.path.join(URL, 'VideoManagerMedia', filename)
+        except ValueError:
+            return None
+    def get_playlists(self, obj):
+        return Playlist.objects.filter(show__id=self.kwargs['show_id'])
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
-    prequels = serializers.SerializerMethodField('get_prequels')
-    sequels = serializers.SerializerMethodField('get_sequels')
 
     class Meta:
         model = Video
-        fields = ('id', 'nom', 'show_id', 'season_id', 'url', 'prequels', 'sequels')
+        fields = ('id', 'nom', 'show_id', 'url')
 
     def get_url(self, obj):
         return obj.video_url
 
-    def get_prequels(self, obj):
-        prequel_id = VideoType.objects.filter(ruta="prequels")[0].id
-        prequels = [{"id": v.id, "nom": v.nom, "url": v.video_url}
-                    for v in obj.video_set.all() if v.tipus.id == prequel_id]
-        return prequels
-
-    def get_sequels(self, obj):
-        sequel_id = VideoType.objects.filter(ruta="sequels")[0].id
-        sequels = [{"id": v.id, "nom": v.nom, "url": v.video_url}
-                   for v in obj.video_set.all() if v.tipus.id == sequel_id]
-        return sequels
-
 
 class PlaylistSerializer(serializers.HyperlinkedModelSerializer):
+    cover = serializers.SerializerMethodField('get_cover')
     class Meta:
         model = Playlist
-        fields = ('id', 'nom', 'show_id', 'app')
+        fields = ('id', 'nom', 'description', 'cover', 'show_id', 'app')
+
+    def get_cover(self, obj):
+        try:
+            filename = os.path.basename(obj.picture.url)
+            return os.path.join(URL, 'VideoManagerMedia', filename)
+        except ValueError:
+            return None
 
 
 class AppVersionSerializer(serializers.HyperlinkedModelSerializer):
