@@ -79,7 +79,7 @@ class ShowViewSet(viewsets.ViewSet):
         return response.Response(serializer.data)
 
 
-class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
+class PlaylistViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = Playlist.objects.all().order_by('id')
         serializer = PlaylistSerializer(queryset, many=True, context={'exclude_fields': ['videos']})
