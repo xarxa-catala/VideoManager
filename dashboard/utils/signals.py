@@ -1,9 +1,8 @@
-from django.db.models.signals import pre_save, post_save, pre_delete, m2m_changed
+from django.db.models.signals import pre_save, post_save, pre_delete
 from django.dispatch.dispatcher import receiver
-from dashboard.models import Video, Playlist
+from dashboard.models import Video
 from .move_file import move_file
 from VideoManager.constants import *
-from VideoManager.settings import BASE_DIR
 from django_q.tasks import async_task
 import os
 
@@ -14,6 +13,14 @@ def model_pre_save(sender, instance, **kwargs):
         instance._pre_save_instance = Video.objects.get(pk=instance.pk)
     except Video.DoesNotExist:
         instance._pre_save_instance = instance
+
+
+@receiver(post_save, sender=Video)
+def remove_video_after_change(sender, instance, **kwargs):
+    prev_file = instance._pre_save_instance.fitxer
+    curr_file = instance.fitxer
+    if prev_file != curr_file and os.path.exists(prev_file):
+        os.remove(prev_file)
 
 
 @receiver(post_save, sender=Video)
