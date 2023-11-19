@@ -76,7 +76,7 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_playlists(self, obj):
         playlist_instances = Playlist.objects.filter(show__id=obj.id)
-        return PlaylistSerializer(playlist_instances, many=True).data
+        return PlaylistSerializer(playlist_instances, many=True, context={'exclude_fields': ['videos']}).data
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
