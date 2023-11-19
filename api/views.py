@@ -11,6 +11,7 @@ class APIRoot(views.APIView):
     `GET /api/v2/shows/`\n
     `GET /api/v2/shows/:show_id/`\n
     `GET /api/v2/shows/:show_id/playlists/`\n
+    `GET /api/v2/playlists/`\n
     `GET /api/v2/playlists/:playlist_id/`\n
     `GET /api/v2/playlists/:playlist_id/videos/`\n
     `GET /api/v2/videos/:video_id/`\n
@@ -93,7 +94,7 @@ class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
         try:
             playlists = Playlist.objects.filter(id=self.kwargs['playlist_id'])
         except KeyError:
-            playlists = Playlist.objects.all()
+            playlists = Playlist.objects.all().order_by('id')
         return playlists
 
 
