@@ -97,13 +97,17 @@ class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
             playlists = Playlist.objects.all().order_by('id')
         return playlists
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['exclude_fields'] = ['videos']
+        return context
 
-class PlaylistVideoViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = VideoSerializer
+
+class SinglePlaylistViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PlaylistSerializer
 
     def get_queryset(self):
-        videos = Playlist.objects.filter(id=self.kwargs['playlist_id']).first().videos.all()
-        return videos
+        return Playlist.objects.filter(id=self.kwargs['playlist_id'])
 
 
 class AppVersionViewSet(viewsets.ReadOnlyModelViewSet):

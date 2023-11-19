@@ -7,9 +7,22 @@ import os
 
 class PlaylistSerializer(serializers.HyperlinkedModelSerializer):
     cover = serializers.SerializerMethodField('get_cover')
+    videos = serializers.SerializerMethodField('get_videos')
+
+    def get_fields(self):
+        fields = super().get_fields()
+
+        exclude_fields = self.context.get('exclude_fields', [])
+        for field in exclude_fields:
+            # providing a default prevents a KeyError
+            # if the field does not exist
+            fields.pop(field, default=None)
+
+        return fields
+
     class Meta:
         model = Playlist
-        fields = ('id', 'nom', 'description', 'cover', 'show_id', 'app')
+        fields = ('id', 'nom', 'description', 'cover', 'show_id', 'app', 'videos')
 
     def get_cover(self, obj):
         try:
@@ -17,6 +30,10 @@ class PlaylistSerializer(serializers.HyperlinkedModelSerializer):
             return os.path.join(URL, 'VideoManagerMedia', filename)
         except ValueError:
             return None
+
+    def get_videos(self, obj):
+        video_instances = Playlist.objects.filter(id=obj.id).first().videos
+        return VideoSerializer(video_instances, many=True).data
 
 
 class ShowSerializer(serializers.HyperlinkedModelSerializer):
