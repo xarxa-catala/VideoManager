@@ -7,13 +7,12 @@ class ShowAdmin(admin.ModelAdmin):
     list_display = ('nom_curt', 'nom', 'description', 'picture', 'picture_cover')
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'season', 'video_url')
+    list_display = ('nom', 'video_url')
     search_fields = ('nom',)
 
 
 class PlaylistAdmin(admin.ModelAdmin):
     list_display = ('nom', 'description', 'picture', 'show', 'app')
-    readonly_fields = ('player',)
 
 
 admin.site.register(Show, ShowAdmin)
