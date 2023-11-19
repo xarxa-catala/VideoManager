@@ -109,6 +109,11 @@ class PlaylistShowViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         return Playlist.objects.filter(show__id=self.kwargs['show_id'])
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['exclude_fields'] = ['videos']
+        return context
+
 
 class VideoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Video.objects.all().order_by('id')
