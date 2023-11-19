@@ -90,7 +90,7 @@ class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PlaylistSerializer
 
     def get_queryset(self):
-        playlists = Playlist.objects.filter(show__id=self.kwargs['show_id'])
+        playlists = Playlist.objects.filter(id=self.kwargs['playlist_id'])
         return playlists
 
 

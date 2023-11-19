@@ -11,6 +11,7 @@ router.register(r'shows', views.ShowViewSet, basename=api_basename)
 router.register(r'playlists/(?P<playlist_id>.+)', views.PlaylistViewSet, basename=api_basename)
 router.register(r'playlists/(?P<playlist_id>.+)/videos',
                 views.PlaylistVideoViewSet, basename=api_basename)
+router.register(r'playlists', views.PlaylistViewSet, basename=api_basename)
 router.register(r'videos/(?P<video_id>.+)', views.VideoViewSet, basename=api_basename)
 router.register(r'app/versions', views.AppVersionViewSet, basename=api_basename)
 
