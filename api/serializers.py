@@ -5,11 +5,26 @@ from VideoManager.constants import *
 import os
 
 
+class PlaylistSerializer(serializers.HyperlinkedModelSerializer):
+    cover = serializers.SerializerMethodField('get_cover')
+    class Meta:
+        model = Playlist
+        fields = ('id', 'nom', 'description', 'cover', 'show_id', 'app')
+
+    def get_cover(self, obj):
+        try:
+            filename = os.path.basename(obj.picture.url)
+            return os.path.join(URL, 'VideoManagerMedia', filename)
+        except ValueError:
+            return None
+
+
 class ShowSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
     thumbnail = serializers.SerializerMethodField('get_thumbnail')
     cover = serializers.SerializerMethodField('get_cover')
     playlists = serializers.SerializerMethodField('get_playlists')
+
 
     class Meta:
         model = Show
@@ -31,8 +46,10 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
             return os.path.join(URL, 'VideoManagerMedia', filename)
         except ValueError:
             return None
+
     def get_playlists(self, obj):
-        return Playlist.objects.filter(show__id=obj.id)
+        playlist_instances = Playlist.objects.filter(show__id=obj.id)
+        return PlaylistSerializer(playlist_instances, many=True).data
 
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
@@ -44,20 +61,6 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_url(self, obj):
         return obj.video_url
-
-
-class PlaylistSerializer(serializers.HyperlinkedModelSerializer):
-    cover = serializers.SerializerMethodField('get_cover')
-    class Meta:
-        model = Playlist
-        fields = ('id', 'nom', 'description', 'cover', 'show_id', 'app')
-
-    def get_cover(self, obj):
-        try:
-            filename = os.path.basename(obj.picture.url)
-            return os.path.join(URL, 'VideoManagerMedia', filename)
-        except ValueError:
-            return None
 
 
 class AppVersionSerializer(serializers.HyperlinkedModelSerializer):
