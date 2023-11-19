@@ -80,26 +80,16 @@ class ShowViewSet(viewsets.ViewSet):
 
 
 class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = PlaylistSerializer
+    def list(self, request):
+        queryset = Playlist.objects.all().order_by('id')
+        serializer = PlaylistSerializer(queryset, many=True, context={'exclude_fields': ['videos']})
+        return response.Response(serializer.data)
 
-    def get_queryset(self):
-        try:
-            playlists = Playlist.objects.filter(id=self.kwargs['playlist_id'])
-        except KeyError:
-            playlists = Playlist.objects.all().order_by('id')
-        return playlists
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['exclude_fields'] = ['videos']
-        return context
-
-
-class SinglePlaylistViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = PlaylistSerializer
-
-    def get_queryset(self):
-        return Playlist.objects.filter(id=self.kwargs['playlist_id'])
+    def retrieve(self, request, pk=None):
+        queryset = Playlist.objects.all().order_by('id')
+        show = get_object_or_404(queryset, pk=pk)
+        serializer = PlaylistSerializer(show)
+        return response.Response(serializer.data)
 
 
 class PlaylistShowViewSet(viewsets.ReadOnlyModelViewSet):
