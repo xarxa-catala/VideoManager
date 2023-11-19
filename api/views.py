@@ -66,20 +66,15 @@ class APIRoot(views.APIView):
 
 
 class ShowViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Show.objects.all().order_by('id')
-    serializer_class = ShowSerializer
+    def list(self, request):
+        queryset = Show.objects.all().order_by('id')
+        serializer = ShowSerializer(queryset, many=True, context={'exclude_fields': ['playlists']})
+        return response.Response(serializer.data)
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['exclude_fields'] = ['playlists']
-        return context
-
-
-class SingleShowViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = ShowSerializer
-
-    def get_queryset(self):
-        return Show.objects.filter(id=self.kwargs['show_id'])
+    def retrieve(self, request):
+        queryset = Show.objects.all().order_by('id')
+        serializer = ShowSerializer(queryset, many=True)
+        return response.Response(serializer.data)
 
 
 class PlaylistViewSet(viewsets.ReadOnlyModelViewSet):
@@ -120,13 +115,6 @@ class PlaylistShowViewSet(viewsets.ReadOnlyModelViewSet):
 class VideoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Video.objects.all().order_by('id')
     serializer_class = VideoSerializer
-
-
-class SingleVideoViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = VideoSerializer
-
-    def get_queryset(self):
-        return Video.objects.filter(id=self.kwargs['video_id'])
 
 
 class VideoPlaylistViewSet(viewsets.ReadOnlyModelViewSet):
