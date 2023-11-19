@@ -16,14 +16,6 @@ def model_pre_save(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Video)
-def remove_video_after_change(sender, instance, **kwargs):
-    prev_file = instance._pre_save_instance.fitxer
-    curr_file = instance.fitxer
-    if prev_file != curr_file and os.path.exists(prev_file):
-        os.remove(prev_file)
-
-
-@receiver(post_save, sender=Video)
 def generate_url(sender, instance, **kwargs):
     if hasattr(instance, '_dirty'):
         return
@@ -57,6 +49,15 @@ def encode(sender, instance, **kwargs):
         instance.save()
     finally:
         del instance._dirty
+
+
+@receiver(post_save, sender=Video)
+def delete_video_on_change(sender, instance, **kwargs):
+    old_file = instance._pre_save_instance.fitxer
+    new_file = instance.fitxer
+    if old_file != new_file:
+        if os.path.isfile(old_file.name):
+            os.remove(old_file.name)
 
 
 # Delete the file when it is deleted from the admin panel.
