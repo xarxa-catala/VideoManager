@@ -73,7 +73,7 @@ class ShowViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class SingleShowViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer = ShowSerializer
+    serializer_class = ShowSerializer
 
     def get_queryset(self):
         return Show.objects.filter(id=self.kwargs['show_id'])
