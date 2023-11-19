@@ -14,6 +14,7 @@ class APIRoot(views.APIView):
     `GET /api/v2/playlists/`\n
     `GET /api/v2/playlists/:playlist_id/`\n
     `GET /api/v2/playlists/:playlist_id/videos/`\n
+    `GET /api/v2/videos/`\n
     `GET /api/v2/videos/:video_id/`\n
     `GET /api/v2/app/versions/`\n
 
@@ -48,7 +49,8 @@ class APIRoot(views.APIView):
                         "description": "string",
                         "cover": "string",
                         "show_id": "int",
-                        "app": "bool"
+                        "app": "bool",
+                        "videos": []
                     }
                 ],
             "version": [
