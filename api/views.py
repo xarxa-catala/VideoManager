@@ -67,27 +67,27 @@ class APIRoot(views.APIView):
 
 
 class ShowViewSet(viewsets.ViewSet):
+    queryset = Show.objects.all().order_by('id')
+
     def list(self, request):
-        queryset = Show.objects.all().order_by('id')
-        serializer = ShowSerializer(queryset, many=True, context={'exclude_fields': ['playlists']})
+        serializer = ShowSerializer(self.queryset, many=True, context={'exclude_fields': ['playlists']})
         return response.Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        queryset = Show.objects.all().order_by('id')
-        show = get_object_or_404(queryset, pk=pk)
+        show = get_object_or_404(self.queryset, pk=pk)
         serializer = ShowSerializer(show)
         return response.Response(serializer.data)
 
 
 class PlaylistViewSet(viewsets.ViewSet):
+    queryset = Playlist.objects.all().order_by('id')
+
     def list(self, request):
-        queryset = Playlist.objects.all().order_by('id')
-        serializer = PlaylistSerializer(queryset, many=True, context={'exclude_fields': ['videos']})
+        serializer = PlaylistSerializer(self.queryset, many=True, context={'exclude_fields': ['videos']})
         return response.Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        queryset = Playlist.objects.all().order_by('id')
-        show = get_object_or_404(queryset, pk=pk)
+        show = get_object_or_404(self.queryset, pk=pk)
         serializer = PlaylistSerializer(show)
         return response.Response(serializer.data)
 

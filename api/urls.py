@@ -3,17 +3,24 @@ from api.apps import ApiConfig
 from rest_framework import routers
 from . import views
 
-api_basename = ApiConfig.name + '/' + ApiConfig.version
-router = routers.SimpleRouter()
-router.register(r'shows', views.ShowViewSet, basename=api_basename)
-router.register(r'shows/(?P<show_id>.+)/playlists', views.PlaylistShowViewSet, basename=api_basename)
-router.register(r'playlists', views.PlaylistViewSet, basename=api_basename)
-router.register(r'playlists/(?P<playlist_id>.+)/videos', views.VideoPlaylistViewSet, basename=api_basename)
-router.register(r'videos', views.VideoViewSet, basename=api_basename)
-router.register(r'app/versions', views.AppVersionViewSet, basename=api_basename)
+
+class OptionalSlashRouter(routers.SimpleRouter):
+
+    def __init__(self):
+        super().__init__()
+        self.trailing_slash = '/?'
+
+
+router = OptionalSlashRouter()
+router.register(r'shows/?', views.ShowViewSet)
+router.register(r'shows/(?P<show_id>.+)/playlists/?', views.PlaylistShowViewSet, basename="shows")
+router.register(r'playlists', views.PlaylistViewSet)
+router.register(r'playlists/(?P<playlist_id>.+)/videos/?', views.VideoPlaylistViewSet, basename="playlists")
+router.register(r'videos/?', views.VideoViewSet)
+router.register(r'app/versions/?', views.AppVersionViewSet)
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
-    path(ApiConfig.version + '/', views.APIRoot.as_view()),
     path(ApiConfig.version + '/', include(router.urls)),
+    path(ApiConfig.version + '/', views.APIRoot.as_view()),
 ]
