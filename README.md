@@ -18,7 +18,6 @@ DATABASE_MYSQL = 'DBName'
 USER_NAME = 'user'
 PASSWORD = 'password'
 HOST = '127.0.0.1'
-AUTH_LDAP_BIND_PASSWORD = 'LDAP_PASSWORD'
 ```
 2. Crear els directoris `migrations`:
 ```
@@ -44,4 +43,4 @@ El VideoManager utilitza dos serveis separats per funcionar:
 * **VideoManager:** és el gestor (Django) com a tal. Dona accés a la web, etc.
 * **QClusterVideoManager:** s'ocupa de codificar vídeos en segon pla (django-q).
 
-Tots dos fitxers i la configuració del servidor web (nginx) es troben al directori `prod-files`.
+Tots dos fitxers i la configuració del servidor web (nginx) es troben al directori `deploy/`.
