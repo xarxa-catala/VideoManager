@@ -81,13 +81,21 @@ class ShowSerializer(serializers.HyperlinkedModelSerializer):
 
 class VideoSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
+    thumbnail = serializers.SerializerMethodField('get_thumbnail')
 
     class Meta:
         model = Video
-        fields = ('id', 'nom', 'show_id', 'url')
+        fields = ('id', 'nom', 'description', 'thumbnail', 'show_id', 'url')
 
     def get_url(self, obj):
         return obj.video_url
+
+    def get_thumbnail(self, obj):
+        try:
+            filename = os.path.basename(obj.picture.url)
+            return os.path.join(URL, 'VideoManagerMedia', filename)
+        except ValueError:
+            return None
 
 
 class AppVersionSerializer(serializers.HyperlinkedModelSerializer):
