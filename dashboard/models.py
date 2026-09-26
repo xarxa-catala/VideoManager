@@ -21,6 +21,8 @@ class Video(models.Model):
     MAX_LENGTH = 200
     id = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=MAX_LENGTH, null=True)
+    description = models.TextField(blank=True, null=True)
+    picture = models.ImageField(max_length=MAX_LENGTH, upload_to=move_picture, blank=True, null=True)
     show = models.ForeignKey(Show, on_delete=models.CASCADE, null=True)
     video_url = models.URLField(max_length=MAX_LENGTH, null=True, blank=True)
     fitxer = models.FileField(max_length=MAX_LENGTH, upload_to=move_file, null=True)
