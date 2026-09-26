@@ -26,7 +26,6 @@ class Video(models.Model):
     show = models.ForeignKey(Show, on_delete=models.CASCADE, null=True)
     video_url = models.URLField(max_length=MAX_LENGTH, null=True, blank=True)
     fitxer = models.FileField(max_length=MAX_LENGTH, upload_to=move_file, null=True)
-    encodar = models.BooleanField(default=False)
     subtitols = models.BooleanField(default=False)
 
     def __str__(self):

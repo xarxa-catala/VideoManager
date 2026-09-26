@@ -54,9 +54,9 @@ def encode(sender, instance, **kwargs):
         return
 
     filename = os.path.join(MEDIA_ROOT_SAVED, instance.fitxer.name)
-    output = os.path.splitext(filename)[0] + ".mp4"
+    output = os.path.splitext(filename)[0] + ".webm"
 
-    if (instance.subtitols or instance.encodar) and not os.path.exists(output):
+    if not os.path.exists(output):
         async_task('dashboard.utils.tasks.encode', instance, filename, output,
                    task_name=instance.fitxer.name, q_options={'scheduler': False})
 
