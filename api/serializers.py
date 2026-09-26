@@ -93,7 +93,7 @@ class VideoSerializer(serializers.HyperlinkedModelSerializer):
     def get_thumbnail(self, obj):
         try:
             filename = os.path.basename(obj.picture.url)
-            return os.path.join(URL, 'VideoManagerMedia', filename)
+            return os.path.join(URL, 'VideoManagerMedia', 'thumbnails', 'one-piece', filename)
         except ValueError:
             return None
 
